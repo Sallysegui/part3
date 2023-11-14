@@ -12,22 +12,46 @@ mongoose.connect(url)
   })
 
 
-//  const personSchema = new mongoose.Schema({
-//     name: String,
-//     number:String,
-//   })
+// const personSchema = new mongoose.Schema({
+//   name: {
+//     type: String,
+//     minLength: 3,
+//     required: true
+//   },
+//   number: {
+//     type: String,
+//     validate: {
+//             validator: function(v) {
+//               return /\d{3}-\d{10}/.test(v);
+//             },
+//     minLength: 8,
+//     required: true
+//   }, message: props => `${props.value} is not a valid phone number!`
+//   },
+// })
   const personSchema = new mongoose.Schema({
     name: {
       type: String,
-      minLength: 2,
+      minLength: 3,
       required: true
     },
     number: {
-      type: Number,
-      minLength: 2,
-      required: true
+      type: String,
+      minLength: 8,
+      validate: {
+              validator: function(v) {
+                return /^\d{2,3}-\d{5,}$/.test(v)
+              }, 
+             message: props => `${props.value} is not a valid phone number!`
+     },
+     required: [true, 'User phone number required']
+      
     }
+   
   })
+
+
+
   personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
       returnedObject.id = returnedObject._id.toString()
