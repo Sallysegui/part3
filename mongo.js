@@ -6,8 +6,8 @@ if (process.argv.length<3) {
 }
 
 const password = process.argv[2]
-const name = process.argv[3]
-const number = process.argv[4]
+// const name = process.argv[3]
+// const number = process.argv[4]
 
 const url =
   `mongodb+srv://sallysegui10:${password}@cluster0.uwaskso.mongodb.net/personApp?retryWrites=true&w=majority`
@@ -21,23 +21,11 @@ const personSchema = new mongoose.Schema({
 
 const Person = mongoose.model('Person', personSchema)
 
-const person = new Person({
-    "id": id ,
-    "name": name,
-    "number": number
-})
-
-
-
-// person.save().then(result => {
-//   console.log('person saved!')
-//   mongoose.connection.close()
-// })
 
 Person.find({}).then(result => {
-    console.log("Phonebook")
-    result.forEach(person => { 
-      console.log(person.name, person.number)
-    })
-    mongoose.connection.close()
+  console.log("Phonebook")
+  result.forEach(person => {
+    console.log(person.name, person.number)
   })
+  mongoose.connection.close()
+})
