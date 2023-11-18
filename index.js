@@ -9,6 +9,9 @@ app.use(cors());
 app.use(express.static('dist'));
 require('dotenv').config();
 const Person = require('./models/person_model');
+//const app = require('./app') // the actual Express application
+const config = require('./utils/config')
+const logger = require('./utils/logger')
 // const requestLogger = (request, response, next) => {
 //   console.log('Method:', request.method)
 //   console.log('Path:  ', request.path)
@@ -31,7 +34,6 @@ const errorHandler = (error, request, response, next) => {
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message });
   }
-
   next(error);
 };
 
@@ -101,7 +103,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then( result => {
+    .then(result => {
       response.status(204).end()
     })
     .catch(error => next(error))
@@ -114,9 +116,6 @@ app.use(errorHandler)
 
 
 
-
-
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+app.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`)
 })
